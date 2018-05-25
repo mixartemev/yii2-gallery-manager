@@ -81,6 +81,7 @@ class GalleryManager extends Widget
             'hasName' => $this->behavior->hasName ? true : false,
             'hasDesc' => $this->behavior->hasDescription ? true : false,
             'uploadUrl' => Url::to($baseUrl + ['action' => 'ajaxUpload']),
+            'uploadFromServerUrl' => Url::to($baseUrl + ['action' => 'actionAjaxUploadFromServer']),
             'deleteUrl' => Url::to($baseUrl + ['action' => 'delete']),
             'updateUrl' => Url::to($baseUrl + ['action' => 'changeData']),
             'arrangeUrl' => Url::to($baseUrl + ['action' => 'order']),
@@ -98,8 +99,9 @@ class GalleryManager extends Widget
         $opts = Json::encode($opts);
         $view = $this->getView();
         GalleryManagerAsset::register($view);
+        @$i++;
         $view->registerJs("$('#{$this->id}').galleryManager({$opts});");
-
+        echo @$i;
         $this->options['id'] = $this->id;
         $this->options['class'] = 'gallery-manager';
 

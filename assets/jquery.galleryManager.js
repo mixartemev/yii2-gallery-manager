@@ -12,6 +12,7 @@
 		hasDesc: true,
 
 		uploadUrl: '',
+		uploadFromServerUrl: '',
 		deleteUrl: '',
 		updateUrl: '',
 		arrangeUrl: '',
@@ -132,6 +133,7 @@
 			'glyphicon glyphicon-ok-circle',
 			'glyphicon glyphicon-ban-circle'
 		];
+		alert(1)
 
 		function addPhoto(id, src, name, description, rank, disable) {
 
@@ -260,6 +262,7 @@
 			.on('click', '.photo .editPhoto', editClick)
 			.on('click', '.photo .photo-select', selectChanged);
 
+		
 
 		if(options.editable){
 			$('.images', $sorter).sortable({tolerance: "pointer"}).disableSelection().bind("sortstop", function () {
@@ -486,6 +489,10 @@
 			var resp = opts.photos[i];
 			addPhoto(resp['id'], resp['preview'], resp['name'], resp['description'], resp['rank'], resp['disable']);
 		}
+
+
+
+		
 	}
 
 	// The actual plugin

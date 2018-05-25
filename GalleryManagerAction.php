@@ -73,6 +73,9 @@ class GalleryManagerAction extends Action
             case 'order':
                 return $this->actionOrder(Yii::$app->request->post('order'));
                 break;
+            case 'ajaxUploadFromServer':
+                return $this->ajaxUploadFromServer();
+                break;
             default:
                 throw new HttpException(400, 'Action do not exists');
                 break;
@@ -104,6 +107,29 @@ class GalleryManagerAction extends Action
      * @throws HttpException
      */
     public function actionAjaxUpload()
+    {
+
+        $imageFile = UploadedFile::getInstanceByName('gallery-image');
+
+        $fileName = $imageFile->tempName;
+        $image = $this->behavior->addImage($fileName);
+
+        // not "application/json", because  IE8 trying to save response as a file
+
+        Yii::$app->response->headers->set('Content-Type', 'text/html');
+
+        return Json::encode(
+            array(
+                'id' => $image->id,
+                'rank' => $image->rank,
+                'name' => (string)$image->name,
+                'description' => (string)$image->description,
+                'preview' => $image->getUrl('original'),
+            )
+        );
+    }
+
+    public function actionAjaxUploadFromServer()
     {
 
         $imageFile = UploadedFile::getInstanceByName('gallery-image');
