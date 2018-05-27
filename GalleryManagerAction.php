@@ -135,7 +135,7 @@ class GalleryManagerAction extends Action
     public function actionSaveFromServer()
     {   
 
-        $image = $this->behavior->addImageFormServ(Yii::$app->basePath.'\web'.Yii::$app->request->post('src'));
+        $image = $this->behavior->addImageFormServ(Yii::$app->basePath.'/web'.Yii::$app->request->post('src'));
 
         Yii::$app->response->headers->set('Content-Type', 'text/html');
 
@@ -151,19 +151,17 @@ class GalleryManagerAction extends Action
 
     public function actionAjaxUploadFromServer()
     {
-        $files=\yii\helpers\FileHelper::findFiles(Yii::$app->basePath.'\web\stock\\');
+        $files=\yii\helpers\FileHelper::findFiles(Yii::$app->basePath.'/web/stock/');
 
         foreach ($files as $key => $value) {
-            $file = str_replace(Yii::$app->basePath."\web\\", '', $value);
-            $posNameFile = stripos($file, strrchr($file , "\\"));
+            $file = str_replace(Yii::$app->basePath."/web/", '', $value);
+            $posNameFile = stripos($file, strrchr($file , "/"));
 
             $res[$key]['name'] = substr($file, $posNameFile+1);
             $res[$key]['path'] = substr($file, 0, $posNameFile+1);
         }
 
         return Json::encode($res);
-        var_dump($res);
-        
     }
 
     /**
