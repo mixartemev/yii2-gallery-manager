@@ -485,7 +485,7 @@
  				var src = [];
  				var ids = [];
  				for (var i = 0; i < arr.length; i++) {
- 				 	src[i]  = '\\' + arr[i].path + arr[i].name;
+ 				 	src[i]  = '/' + arr[i].path + arr[i].name;
  				 	html += '<div class="col-md-6 "><img class="img-serv" data-id="" src="'+src[i]+'"/></div>';
  				}
 
