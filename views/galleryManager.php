@@ -52,13 +52,16 @@ if($editable){ ?>
 
 
 
- <div class="server-modal modal fade">
+ 
+
+<?php if($editable) { ?>
+<div class="server-modal modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <a class="close" data-dismiss="modal">×</a>
 
-                    <h3 class="modal-title"><?php echo Yii::t( 'galleryManager/main', 'Edit information' ) ?></h3>
+                    <h3 class="modal-title">Загрузить с сервера</h3>
                 </div>
                 <div class="modal-body">
                     <div class="form"></div>
@@ -76,7 +79,6 @@ if($editable){ ?>
         </div>
     </div>
 
-<?php if($editable) { ?>
     <!-- Modal window to edit photo information -->
     <div class="editor-modal modal fade">
         <div class="modal-dialog">

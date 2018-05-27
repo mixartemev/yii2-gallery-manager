@@ -382,6 +382,37 @@ class GalleryBehavior extends Behavior
         return $galleryImage;
     }
 
+    public function addImageFormServ($fileName)
+    {
+        $db = \Yii::$app->db;
+        $db->createCommand()
+            ->insert(
+                $this->tableName,
+                [
+                    'type' => $this->type,
+                    'ownerId' => $this->getGalleryId()
+                ]
+                // ToDo еще не обработано новое поле disable
+            )->execute();
+
+        $id = $db->getLastInsertID('gallery_image_id_seq');
+        $db->createCommand()
+            ->update(
+                $this->tableName,
+                ['rank' => $id],
+                ['id' => $id]
+            )->execute();
+
+        $this->replaceImage($id, $fileName);
+        
+        $galleryImage = new GalleryImage($this, ['id' => $id]);
+
+        if ($this->_images !== null) {
+            $this->_images[] = $galleryImage;
+        }
+
+        return $galleryImage;
+    }
 
     public function arrange($order)
     {

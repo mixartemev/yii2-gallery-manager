@@ -16,6 +16,7 @@
 		deleteUrl: '',
 		updateUrl: '',
 		arrangeUrl: '',
+		saveFromServerUrl: '',
 
 		photos: [],
 
@@ -37,6 +38,7 @@
 	};
 
 	function galleryManager(el, options) {
+
 		//Extending options:
 		var opts = $.extend({}, galleryDefaults, options);
 		//code
@@ -133,7 +135,6 @@
 			'glyphicon glyphicon-ok-circle',
 			'glyphicon glyphicon-ban-circle'
 		];
-		alert(1)
 
 		function addPhoto(id, src, name, description, rank, disable) {
 
@@ -144,7 +145,7 @@
 			var photo = $(photoTemplate);
 			photos[id] = photo;
 			photo.data('id', id);
-			photo.data('rank', rank);
+			photo.data('rank', id);
 
 			$('img', photo).attr('src', src);
 			if (opts.hasName){
@@ -160,7 +161,6 @@
 			/* after add callback */
 			eval(opts.afterAdd);
 			/* after add callback */
-
 			return photo;
 		}
 
@@ -193,7 +193,7 @@
 		}
 
 		function removePhotos(ids) {
-
+	
 			/* before remove callback */
 			eval(opts.beforeRemove);
 			/* before remove callback */
@@ -235,7 +235,7 @@
 			var photo = $(this).closest('.photo');
 			var id = photo.data('id');
 			editPhotos([id]);
-			return false;
+			
 		}
 
 		function updateButtons() {
@@ -295,6 +295,7 @@
 		}
 
 		if (window.FormData !== undefined) { // if XHR2 available
+
 			var uploadFileName = $('.afile', $gallery).attr('name');
 
 			var multiUpload = function (files) {
@@ -322,6 +323,7 @@
 						uploadedCount++;
 						if (this.status == 200) {
 							var resp = JSON.parse(this.response);
+							console.log(resp)
 							addPhoto(resp['id'], resp['preview'], resp['name'], resp['description'], resp['rank'], resp['disable']);
 							ids.push(resp['id']);
 						} else {
@@ -398,6 +400,7 @@
 
 			$('.afile', $gallery).attr('multiple', 'true').on('change', function (e) {
 				e.preventDefault();
+
 				multiUpload(this.files);
 			});
 		} else {
@@ -471,6 +474,51 @@
 			removePhotos(ids);
 
 		});
+	
+		$('.upload_from_server', $gallery).click(function (e) {
+			$('.server-modal').modal();
+			var mod = $('.server-modal');
+			var html = "";
+			
+			$.post( opts.uploadFromServerUrl, function( data ) {
+ 				var arr = $.parseJSON(data);
+ 				var src = [];
+ 				var ids = [];
+ 				for (var i = 0; i < arr.length; i++) {
+ 				 	src[i]  = '\\' + arr[i].path + arr[i].name;
+ 				 	html += '<div class="col-md-6 "><img class="img-serv" data-id="" src="'+src[i]+'"/></div>';
+ 				}
+
+ 				mod.find('.modal-body').html(html);
+
+ 				$('.server-modal').click(function(event){
+ 					 var target = $( event.target );
+ 					  if ( target.is( ".img-serv" ) ) {
+ 					  	var src = target.attr('src');
+ 					  	$.post( opts.saveFromServerUrl,{src: src}, function( data ) {
+							data = $.parseJSON(data);
+							console.log(src)
+							console.log(data)
+							addPhoto(data.id, src, data.name, data.description, data.rank, data.disable);
+							ids.push(data.id);
+							editPhotos(ids);
+						
+						})
+						
+					  }
+ 				})
+ 				
+				
+
+ 				
+ 				
+			});
+
+		});
+
+	
+
+
 
 		$('.select_all', $gallery).change(function () {
 			if ($(this).prop('checked')) {
