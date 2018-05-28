@@ -66,9 +66,10 @@ if($editable){ ?>
                 <div class="modal-body">
                     <div class="form"></div>
                 </div>
+                <div class="clear"></div>
                 <div class="modal-footer">
-                    <a href="#" class="btn btn-primary save-changes">
-                        <?php echo Yii::t( 'galleryManager/main', 'Save changes' ) ?>
+                    <a href="#" class="btn btn-primary save-changes upload-select" onclick="return false">
+                        <?php echo Yii::t( 'galleryManager/main', 'Upload selected' ) ?>
                     </a>
                     <a href="#" class="btn" data-dismiss="modal"><?php echo Yii::t(
                             'galleryManager/main',

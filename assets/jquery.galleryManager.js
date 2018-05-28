@@ -486,31 +486,49 @@
  				var ids = [];
  				for (var i = 0; i < arr.length; i++) {
  				 	src[i]  = '/' + arr[i].path + arr[i].name;
- 				 	html += '<div class="col-md-6 "><img class="img-serv" data-id="" src="'+src[i]+'"/></div>';
+ 				 	html += '<div class="col-md-3 "><img class="img-serv" data-id="" src="'+src[i]+'"/></div>';
  				}
 
  				mod.find('.modal-body').html(html);
-
+ 				var filesCount = 0;
+ 				var uploadedCount = 0;
  				$('.server-modal').click(function(event){
  					 var target = $( event.target );
+ 					 
  					  if ( target.is( ".img-serv" ) ) {
- 					  	var src = target.attr('src');
- 					  	$.post( opts.saveFromServerUrl,{src: src}, function( data ) {
-							data = $.parseJSON(data);
-							console.log(src)
-							console.log(data)
-							addPhoto(data.id, src, data.name, data.description, data.rank, data.disable);
-							ids.push(data.id);
-							editPhotos(ids);
-						
-						})
-						
+ 					  	if ( target.is( ".selected" ) ) {
+ 					  		target.removeClass("selected");
+ 					  		filesCount -=1;
+ 					  	} else {
+ 					  		target.addClass("selected");
+ 					  		filesCount +=1;
+ 					  	}
+					  }
+					  if (target.is( ".upload-select" ))  {
+
+					  	$progressOverlay.show();
+						$uploadProgress.css('width', '5%');
+						mod.modal('hide');
+						$('.img-serv.selected').each(function(i,elem) {
+						  	$.post( opts.saveFromServerUrl,{src: $(elem).attr('src')}, function( data ) {
+
+								data = $.parseJSON(data);
+								addPhoto(data.id, data.preview, data.name, data.description, data.rank, data.disable);
+								ids.push(data.id);
+
+								uploadedCount +=1;
+								$uploadProgress.css('width', '' + (5 + 95 * uploadedCount / filesCount) + '%');
+								if (uploadedCount === filesCount) {
+									$uploadProgress.css('width', '100%');
+									$progressOverlay.hide();
+									editPhotos(ids);
+								}
+
+							});
+						});
+
 					  }
  				})
- 				
-				
-
- 				
  				
 			});
 

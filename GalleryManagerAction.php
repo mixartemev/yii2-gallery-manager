@@ -145,6 +145,7 @@ class GalleryManagerAction extends Action
                 'rank' => $image->rank,
                 'name' => (string)$image->name,
                 'description' => (string)$image->description,
+                'preview' => $image->getUrl('original'),
             )
         );
     }
