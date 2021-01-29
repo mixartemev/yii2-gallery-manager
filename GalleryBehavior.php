@@ -234,10 +234,6 @@ class GalleryBehavior extends Behavior
     public function getUrl($imageId, $version = 'original')
     {
         $path = Yii::$app->params['s3domain'] . '/' . $this->getFilePath($imageId, $version);
-        if (($h = get_headers($path))[0] != 'HTTP/1.1 200 OK') {
-            print_r($path);
-            // throw new NotFoundHttpException($path);
-        }
 
         if (!empty($this->timeHash)) {
 
